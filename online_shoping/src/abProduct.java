@@ -3,11 +3,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class abProduct implements Payable {
+
     private final Long id;
     private String title;
     private double price;
     private String category;
     private boolean paid;
+    private ProductStatus status;
 
     private static Long counter = 1L;
     private static Map<Integer, String> staticCategories = new HashMap<>();
@@ -17,6 +19,7 @@ public abstract class abProduct implements Payable {
         staticCategories.put(2, "Смартфоны");
         staticCategories.put(3, "Ноутбуки");
         staticCategories.put(4, "Телевизоры");
+        staticCategories.put(5, "Аксессуары");
     }
 
     public abProduct(String title, double price, String category) {
@@ -25,6 +28,7 @@ public abstract class abProduct implements Payable {
         this.price = price;
         this.category = category;
         this.paid = false;
+        this.status = ProductStatus.AVAILABLE;
     }
 
     private Long generateId() {
@@ -32,7 +36,7 @@ public abstract class abProduct implements Payable {
     }
 
     private double calculatePrice() {
-        return this.price;
+        return price;
     }
 
     @Override
@@ -62,42 +66,47 @@ public abstract class abProduct implements Payable {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public static Map<Integer, String> getStaticCategories() {
         return staticCategories;
     }
 
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public boolean isAvailable() {
+        return status == ProductStatus.AVAILABLE;
+    }
+
     @Override
     public String toString() {
-        return "abProduct{id=" + id + ", title='" + title + "', price=" + price +
-                ", category='" + category + "', paid=" + paid + "}";
+        return "id=" + id +
+                ", title=" + title +
+                ", price=" + price +
+                ", category=" + category +
+                ", paid=" + paid +
+                ", status=" + status;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof abProduct)) return false;
-        abProduct abProduct = (abProduct) o;
-        return Objects.equals(id, abProduct.id);
+        abProduct p = (abProduct) o;
+        return Objects.equals(id, p.id);
     }
 
     @Override

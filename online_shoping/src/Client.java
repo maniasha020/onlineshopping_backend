@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Client implements Financeable {
+
     private String name;
     private double balance;
-    private ArrayList<abProduct> cart;
+    private List<abProduct> cart;
 
     public Client(String name, double balance) {
         this.name = name;
@@ -11,20 +13,14 @@ public class Client implements Financeable {
         this.cart = new ArrayList<>();
     }
 
-    public void addProduct(abProduct product) {
-        if (product != null) {
+    public void addToCart(abProduct product) {
+        if (product != null && product.isAvailable()) {
             cart.add(product);
         }
     }
 
-    public double getCartTotal() {
-        double total = 0;
-
-        for (abProduct product : cart) {
-            total += product.getFinalPrice();
-        }
-
-        return total;
+    public List<abProduct> getCart() {
+        return cart;
     }
 
     @Override
@@ -34,31 +30,43 @@ public class Client implements Financeable {
 
     @Override
     public String getFinancialStatus() {
-        return "Баланс клиента: " + balance;
+        return "Баланс: " + balance;
     }
 
     @Override
-    public double getBalance() {
-        return balance;
+    public double getFinalPrice() {
+        double total = 0;
+
+        for (abProduct p : cart) {
+            total += p.getFinalPrice();
+        }
+
+        return total;
     }
 
-    public void payForProducts() {
-        double total = getCartTotal();
+    public void payForProduct(abProduct product) {
+        if (product == null) {
+            System.out.println("Товар не выбран");
+            return;
+        }
 
-        if (checkBalance(total)) {
-            balance -= total;
+        double sum = product.getFinalPrice();
 
-            for (abProduct product : cart) {
-                product.pay(product.getFinalPrice());
-            }
-
-            System.out.println(name + " оплатил покупку на сумму " + total);
+        if (checkBalance(sum) && product.isAvailable()) {
+            balance -= sum;
+            product.pay(sum);
+            product.setStatus(ProductStatus.NOT_AVAILABLE);
+            System.out.println(name + " оплатил товар " + product.getTitle());
         } else {
-            System.out.println(name + " не может оплатить покупку. Не хватает денег");
+            System.out.println(name + " не может оплатить товар " + product.getTitle());
         }
     }
 
     public String getName() {
         return name;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 }

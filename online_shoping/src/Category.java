@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Category {
+public class Category implements Comparable<Category> {
     private String name;
     private List<String> subcategories;
-    private List<abProduct> items; // Список товаров для расчета цены
+    private List<abProduct> items;
 
     private static int categoryCount = 0;
     private static int subcategoryCount = 0;
@@ -14,7 +14,7 @@ public class Category {
         this.name = name;
         this.subcategories = new ArrayList<>();
         this.items = new ArrayList<>();
-        categoryCount++; // Увеличиваем счетчик при создании новой категории
+        categoryCount++;
     }
 
     public void addSubcategory(String subcategory) {
@@ -24,9 +24,9 @@ public class Category {
         }
     }
 
-    public void addItem(abProduct abProduct) {
-        if (abProduct != null) {
-            items.add(abProduct);
+    public void addItem(abProduct product) {
+        if (product != null) {
+            items.add(product);
         }
     }
 
@@ -38,8 +38,17 @@ public class Category {
         return total;
     }
 
-    public String getName() { return name; }
-    public List<String> getSubcategories() { return subcategories; }
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getSubcategories() {
+        return subcategories;
+    }
+
+    public List<abProduct> getItems() {
+        return items;
+    }
 
     public static int getCategoryCount() {
         return categoryCount;
@@ -47,6 +56,11 @@ public class Category {
 
     public static int getSubcategoryCount() {
         return subcategoryCount;
+    }
+
+    @Override
+    public int compareTo(Category other) {
+        return this.name.compareToIgnoreCase(other.name);
     }
 
     @Override
@@ -70,6 +84,6 @@ public class Category {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return Objects.hash(name);
     }
 }
