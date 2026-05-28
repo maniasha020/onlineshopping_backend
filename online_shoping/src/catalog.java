@@ -25,10 +25,16 @@ public class catalog {
     }
 
     public void showCatalog() {
-        System.out.println("     CATALOG    ");
+        System.out.println("\n=== КАТАЛОГ ===");
+        if (categories.isEmpty()) {
+            System.out.println("Каталог пуст.");
+            return;
+        }
 
         for (int i = 0; i < categories.size(); i++) {
-            System.out.println((i + 1) + ". " + categories.get(i));
+            Category cat = categories.get(i);
+            System.out.println((i + 1) + ". " + cat.getName());
         }
+        System.out.println("====================================");
     }
 }

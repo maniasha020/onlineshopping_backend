@@ -78,7 +78,6 @@ public abstract class abProduct implements Payable {
         return staticCategories;
     }
 
-
     public ProductStatus getStatus() {
         return status;
     }
